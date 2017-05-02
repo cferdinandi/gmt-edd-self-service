@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/cferdinandi/gmt-edd-self-service/
  * GitHub Plugin URI: https://github.com/cferdinandi/gmt-edd-self-service/
  * Description: Let buyers access downloads if they lose their original purchase receipt.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Chris Ferdinandi
  * Author URI: http://gomakethings.com
  * Text Domain: edd_self_service
@@ -14,7 +14,7 @@
 
 
 // Define constants
-define( 'GMT_EDD_SELF_SERVICE_VERSION', '1.0.0' );
+define( 'GMT_EDD_SELF_SERVICE_VERSION', '1.0.1' );
 
 
 // Includes
@@ -33,7 +33,7 @@ function gmt_edd_self_service_check_version() {
 
 	// Update plugin to current version number
 	if ( empty( $old_version ) || version_compare( $old_version, GMT_EDD_SELF_SERVICE_VERSION, '<' ) ) {
-		update_site_option( 'gmt_mailchimp_version', GMT_EDD_SELF_SERVICE_VERSION );
+		update_site_option( 'gmt_edd_self_service_version', GMT_EDD_SELF_SERVICE_VERSION );
 	}
 
 }

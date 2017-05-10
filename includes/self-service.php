@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * MailChimp form shortcode
+	 * Self-service form shortcode
 	 * @return string Shortcode markup
 	 */
 	function gmt_edd_self_service_form( $atts ) {
@@ -42,7 +42,7 @@
 						'<button class="edd-self-service-button">' . $self_service['label'] . '</button>' .
 					'</div>' .
 				'</div>' .
-				( empty( $status ) ? '' : '<p><em>' . _e( 'Please use a valid email address.', 'edd_self_service' ) . '</em></p>' ) .
+				( empty( $status ) ? '' : '<p><em>' . __( 'Please use a valid email address.', 'edd_self_service' ) . '</em></p>' ) .
 			'</form>';
 
 	}
@@ -87,8 +87,8 @@
 
 		// If email is invalid
 		if ( empty( filter_var( $_POST['edd_self_service_email'], FILTER_VALIDATE_EMAIL ) ) ) {
-			mailchimp_set_session( 'edd_self_service_status', true, 'post' );
-			mailchimp_set_session( 'edd_self_service_email', $_POST['edd_self_service_email'], 'post' );
+			gmt_edd_self_service_set_session( 'edd_self_service_status', true );
+			gmt_edd_self_service_set_session( 'edd_self_service_email', $_POST['edd_self_service_email'], 'post' );
 			wp_safe_redirect( $status, 302 );
 			exit;
 		}
@@ -100,7 +100,7 @@
 		}
 
 		// Success message
-		mailchimp_set_session( 'edd_self_service_success', true, 'post' );
+		gmt_edd_self_service_set_session( 'edd_self_service_success', true );
 		wp_safe_redirect( $status, 302 );
 		exit;
 

@@ -116,7 +116,7 @@
 		}
 
 		// Send receipts
-		do_action( 'gmt_edd_self_service_send_emails', $email );
+		do_action( 'gmt_edd_self_service_send_emails', sanitize_email( $_POST['edd_self_service_email'] ) );
 
 		// Success message
 		gmt_edd_self_service_set_session( 'edd_self_service_success', true );

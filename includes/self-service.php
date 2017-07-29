@@ -51,28 +51,6 @@
 
 
 	/**
-	 * Send the self-service purchase receipts
-	 * @param  string $email The buyer's email address
-	 */
-	function gmt_edd_self_service_send_emails( $email ) {
-
-		// Check for an email first
-		if ( empty($email) ) return;
-
-		// Get the user's purchases
-		$purchases = edd_get_users_purchases( $email, 99, false );
-
-		// Resend purchase receipts
-		foreach( $purchases as $purchase ) {
-			edd_email_purchase_receipt( $purchase->ID, false, $email );
-		}
-
-	}
-	add_action('wp_async_gmt_edd_self_service_send_emails', 'gmt_edd_self_service_send_emails');
-
-
-
-	/**
 	 * Process self-service form
 	 */
 	function gmt_edd_self_service_process_form() {
@@ -116,7 +94,10 @@
 		}
 
 		// Send receipts
-		do_action( 'gmt_edd_self_service_send_emails', sanitize_email( $_POST['edd_self_service_email'] ) );
+		$purchases = edd_get_users_purchases( $_POST['edd_self_service_email'], 99, false );
+		foreach( $purchases as $purchase ) {
+			edd_email_purchase_receipt( $purchase->ID, false, $_POST['edd_self_service_email'] );
+		}
 
 		// Success message
 		gmt_edd_self_service_set_session( 'edd_self_service_success', true );
@@ -125,42 +106,3 @@
 
 	}
 	add_action( 'init', 'gmt_edd_self_service_process_form' );
-
-
-	/**
-	 * Asynchronously send purchase receipts
-	 */
-	class EDD_Async_Self_Service extends WP_Async_Task {
-
-		protected $action = 'gmt_edd_self_service_send_emails';
-
-		/**
-		 * Prepare data for the asynchronous request
-		 *
-		 * @throws Exception If for any reason the request should not happen
-		 *
-		 * @param array $data An array of data sent to the hook
-		 *
-		 * @return array
-		 */
-		protected function prepare_data( $data ) {
-			return array( 'email' => $data[0] );
-		}
-
-		/**
-		 * Run the async task action
-		 */
-		protected function run_action() {
-			do_action( "wp_async_$this->action", $_POST['email'] );
-		}
-
-	}
-
-
-	/**
-	 * Initialize our extended class
-	 */
-	function init_edd_self_service() {
-	    new EDD_Async_Self_Service();
-	}
-	add_action( 'plugins_loaded', 'init_edd_self_service' );

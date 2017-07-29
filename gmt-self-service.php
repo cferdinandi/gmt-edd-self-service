@@ -14,7 +14,7 @@
 
 
 // Define constants
-define( 'GMT_EDD_SELF_SERVICE_VERSION', '1.1.1' );
+define( 'GMT_EDD_SELF_SERVICE_VERSION', '1.1.2' );
 
 
 // Includes

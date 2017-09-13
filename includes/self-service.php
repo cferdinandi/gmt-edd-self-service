@@ -14,7 +14,7 @@
 		), $atts );
 
 		// Prevent this content from caching
-		define('DONOTCACHEPAGE', TRUE);
+		// define('DONOTCACHEPAGE', TRUE);
 
 		// Status
 		$status = gmt_edd_self_service_get_session( 'edd_self_service_status', true );
@@ -32,7 +32,7 @@
 			'<form class="edd-self-service-form" id="edd-self-service-form" name="edd_self_service_form" action="" method="post">' .
 				'<input type="hidden" id="edd_self_service_tarpit_time" name="edd_self_service_tarpit_time" value="' . esc_attr( current_time( 'timestamp' ) ) . '">' .
 				$tarpit .
-				wp_nonce_field( 'edd_self_service_form_nonce', 'edd_self_service_form_process', true, false ) .
+				'<input type="hidden" id="edd_self_service_submit" name="edd_self_service_submit" value="' . get_site_option( 'gmt_edd_self_service_submit_hash' ) . '">' .
 				'<label class="edd-self-service-label" for="edd_self_service_email">' . __( 'Email Address', 'edd_self_service' ) . '</label>' .
 				'<div class="edd-self-service-row">' .
 					'<div class="edd-self-service-grid-input">' .
@@ -56,16 +56,15 @@
 	function gmt_edd_self_service_process_form() {
 
 		// Check that form was submitted
-		if ( !isset( $_POST['edd_self_service_form_process'] ) ) return;
+		if ( !isset( $_POST['edd_self_service_submit'] ) ) return;
 
 		// Verify data came from proper screen
-		if ( !wp_verify_nonce( $_POST['edd_self_service_form_process'], 'edd_self_service_form_nonce' ) ) {
-			die( 'Security check' );
-		}
+		if ( strcmp( $_POST['edd_self_service_submit'], get_site_option( 'gmt_edd_self_service_submit_hash' ) ) !== 0 ) return;
 
 		// Variables
 		$referrer = gmt_edd_self_service_get_url();
-		$status = $referrer . '#edd-self-service-form';
+		// $status = $referrer . '#edd-self-service-form';
+		$status = add_query_arg( 'edd-self-service', 'submitted', $referrer . '#edd-self-service-form' );
 
 		// Sanity check
 		if ( empty( $_POST['edd_self_service_email'] ) ) {

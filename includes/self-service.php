@@ -13,9 +13,6 @@
 			'honeypot' => '',
 		), $atts );
 
-		// Prevent this content from caching
-		// define('DONOTCACHEPAGE', TRUE);
-
 		// Status
 		$status = gmt_edd_self_service_get_session( 'edd_self_service_status', true );
 		$success = gmt_edd_self_service_get_session( 'edd_self_service_success', true );
@@ -63,7 +60,6 @@
 
 		// Variables
 		$referrer = gmt_edd_self_service_get_url();
-		// $status = $referrer . '#edd-self-service-form';
 		$status = add_query_arg( 'edd-self-service', 'submitted', $referrer . '#edd-self-service-form' );
 
 		// Sanity check
